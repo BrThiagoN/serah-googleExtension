@@ -1,0 +1,144 @@
+/* ==========================================================================
+   SISTEMA DE PALETA DE CORES - SERAH
+   Organizado por categorias funcionais com suporte a hex, RGB e HSL
+   ========================================================================== */
+
+/* ==========================================================================
+   1. PALETA DE VERDES (PRIMÁRIAS / AÇÃO)
+   ========================================================================== */
+:root {
+  /* Verde Primário / Ação Principal */
+  --color-green-primary: #0E8A4B;
+  --color-green-primary-rgb: 14, 138, 75;
+  --color-green-primary-hsl: 148, 81%, 30%;
+
+  /* Verde Secundário / Botão Hover */
+  --color-green-secondary: #19B86A;
+  --color-green-secondary-rgb: 25, 184, 106;
+  --color-green-secondary-hsl: 148, 76%, 41%;
+
+  /* Verde Terciário / Elementos de Destaque */
+  --color-green-tertiary: #14B866;
+  --color-green-tertiary-rgb: 20, 184, 102;
+  --color-green-tertiary-hsl: 147, 80%, 40%;
+
+  /* Verde Quaternário / Elementos Leves */
+  --color-green-light: #23D17B;
+  --color-green-light-rgb: 35, 209, 123;
+  --color-green-light-hsl: 147, 71%, 48%;
+}
+
+/* ==========================================================================
+   2. PALETA DE VERMELHOS (ALERTA / ERRO)
+   ========================================================================== */
+:root {
+  /* Vermelho Primário / Erro Crítico */
+  --color-red-primary: #D62828;
+  --color-red-primary-rgb: 214, 40, 40;
+  --color-red-primary-hsl: 0, 68%, 50%;
+
+  /* Vermelho Secundário / Alertas Forte */
+  --color-red-secondary: #B71C1C;
+  --color-red-secondary-rgb: 183, 28, 28;
+  --color-red-secondary-hsl: 0, 73%, 41%;
+
+  /* Vermelho Terciário / Alertas Leves */
+  --color-red-tertiary: #FF5252;
+  --color-red-tertiary-rgb: 255, 82, 82;
+  --color-red-tertiary-hsl: 0, 100%, 66%;
+
+  /* Vermelho Quaternário / Elementos Decorativos */
+  --color-red-light: #FF6B6B;
+  --color-red-light-rgb: 255, 107, 107;
+  --color-red-light-hsl: 0, 100%, 71%;
+}
+
+/* ==========================================================================
+   3. PALETA DE NEUTROS (FUNDO E ESTRUTURA)
+   ========================================================================== */
+:root {
+  /* Neutro Escuro 1 / Fundo Escuro Primário */
+  --color-neutral-dark-1: #121212;
+  --color-neutral-dark-1-rgb: 18, 18, 18;
+  --color-neutral-dark-1-hsl: 0, 0%, 7%;
+
+  /* Neutro Escuro 2 / Fundo Escuro Secundário */
+  --color-neutral-dark-2: #1B1B1B;
+  --color-neutral-dark-2-rgb: 27, 27, 27;
+  --color-neutral-dark-2-hsl: 0, 0%, 11%;
+
+  /* Neutro Escuro 3 / Elementos de Interface Escuros */
+  --color-neutral-dark-3: #252525;
+  --color-neutral-dark-3-rgb: 37, 37, 37;
+  --color-neutral-dark-3-hsl: 0, 0%, 15%;
+
+  /* Neutro Claro 1 / Fundo Claro Primário */
+  --color-neutral-light-1: #F8FAF9;
+  --color-neutral-light-1-rgb: 248, 250, 249;
+  --color-neutral-light-1-hsl: 150, 20%, 98%;
+
+  /* Neutro Claro 2 / Fundo Branco */
+  --color-neutral-light-2: #FFFFFF;
+  --color-neutral-light-2-rgb: 255, 255, 255;
+  --color-neutral-light-2-hsl: 0, 0%, 100%;
+}
+
+/* ==========================================================================
+   4. PALETA DE TEXTOS (TIPOGRÁFICAS)
+   ========================================================================== */
+:root {
+  /* Texto Escuro 1 / Texto Principal Modo Claro */
+  --color-text-dark-1: #1A1A1A;
+  --color-text-dark-1-rgb: 26, 26, 26;
+  --color-text-dark-1-hsl: 0, 0%, 10%;
+
+  /* Texto Escuro 2 / Texto Secundário Modo Claro */
+  --color-text-dark-2: #5E646A;
+  --color-text-dark-2-rgb: 94, 100, 106;
+  --color-text-dark-2-hsl: 210, 6%, 39%;
+
+  /* Texto Claro 1 / Texto Principal Modo Escuro */
+  --color-text-light-1: #B0B8BE;
+  --color-text-light-1-rgb: 176, 184, 190;
+  --color-text-light-1-hsl: 208, 10%, 72%;
+
+  /* Texto Claro 2 / Texto Principal Modo Escuro (Alto Contraste) */
+  --color-text-light-2: #F5F5F5;
+  --color-text-light-2-rgb: 245, 245, 245;
+  --color-text-light-2-hsl: 0, 0%, 96%;
+}
+
+/* ==========================================================================
+   REGRAS DE USO - CATEGORIAS FUNCIONAIS
+   ========================================================================== */
+
+/* 
+   VERDES (PRIMÁRIAS / AÇÃO)
+   -------------------------
+   - #0E8A4B: Botões primários, links de ação, ícones de confirmação
+   - #19B86A: Hover de botões primários, elementos de destaque
+   - #14B866: Estados de sucesso, barras de progresso, badges
+   - #23D17B: Indicadores de status ativo, elementos decorativos
+   
+   VERMELHOS (ALERTA / ERRO)
+   --------------------------
+   - #D62828: Mensagens de erro crítico, botões de exclusão
+   - #B71C1C: Estados de erro em formulários, ícones de alerta
+   - #FF5252: Alertas de aviso, bordas de erro
+   - #FF6B6B: Elementos decorativos de erro, badges de perigo
+   
+   NEUTROS (FUNDO E ESTRUTURA)
+   -----------------------------
+   - #121212: Fundo principal modo escuro
+   - #1B1B1B: Fundo de cards e containers modo escuro
+   - #252525: Bordas e divisores modo escuro
+   - #F8FAF9: Fundo principal modo claro
+   - #FFFFFF: Fundo de cards e containers modo claro
+   
+   TEXTOS (TIPOGRÁFICAS)
+   ----------------------
+   - #1A1A1A: Títulos e texto principal modo claro
+   - #5E646A: Texto secundário, placeholders e descrições modo claro
+   - #B0B8BE: Texto secundário, placeholders modo escuro
+   - #F5F5F5: Títulos e texto principal modo escuro
+*/

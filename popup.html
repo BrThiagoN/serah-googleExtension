@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Extensão</title>
+  <!-- Link para o arquivo de estilos premium -->
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Cabeçalho (Header) -->
+    <header class="app-header">
+      <div class="brand">
+        <img src="images/icon32.png" class="logo-icon" alt="Logo">
+        <h1>Serah?</h1>
+      </div>
+      <div class="status-indicator">
+        <span class="status-dot active"></span>
+        <span id="status-text">Ativo</span>
+      </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="app-content">
+      <!-- Seção: Captura de Texto Selecionado -->
+      <section class="card">
+        <h2>Texto Selecionado</h2>
+        <p class="description">Texto que você selecionou/grifou na página ativa.</p>
+        
+        <div class="form-group">
+          <textarea id="texto-selecionado" placeholder="Selecione um texto em qualquer site e abra o popup, ou clique abaixo..." rows="4"></textarea>
+          <button id="btn-capturar" class="btn btn-primary">
+            <span>📥</span> Capturar Seleção
+          </button>
+        </div>
+      </section>
+
+      <!-- Seção Exemplo: Armazenamento Local -->
+      <section class="card">
+        <h2>Sera que e verdade?</h2>
+        <div class="form-group">
+          <label for="input-pergunta">Cole um texto, url ou faca uma pergunta:</label>
+          <div class="input-action-group">
+            <input type="text" id="input-pergunta" placeholder="Escreva algo...">
+            <button id="btn-enviar" class="btn btn-accent">Enviar</button>
+          </div>
+        </div>
+        <p class="storage-preview">Último salvo: <span id="ultimo-salvo">-</span></p>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- Seção da Resposta da IA (Resultado da Análise) -->
+      <!-- ================================================================= -->
+      <section class="card card-ai" id="card-resposta-ia">
+        <div class="card-ai-header">
+          <span class="card-ai-icon">🤖</span>
+          <h2>Análise da Serah?</h2>
+        </div>
+        
+        <div class="card-ai-body">
+          <div id="ai-resultado" class="ai-resultado-content">
+            <div class="ai-status-row hidden" id="ai-status-row">
+              <div class="ai-verdict-badge" id="ai-verdict-badge">-</div>
+              <div class="ai-score-container">
+                <span class="ai-score-label">Confiabilidade:</span>
+                <span id="ai-score-value" class="ai-score-value">-</span>
+              </div>
+            </div>
+            
+            <div class="ai-explanation-box">
+              <textarea id="ai-explanation-text" readonly rows="5" placeholder="A análise de veracidade aparecerá aqui. Digite uma pergunta ou capture o texto selecionado na página acima para que a inteligência artificial verifique se a informação é confiável."></textarea>
+            </div>
+            
+            <div class="ai-sources-section hidden" id="ai-sources-section">
+              <h3>Fontes Relacionadas:</h3>
+              <ul class="ai-sources-list" id="ai-sources-list">
+                <!-- Inserido dinamicamente via JS -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- ================================================================= -->
+    </main>
+
+    <!-- Botão de Limpar Sessão -->
+    <div class="action-footer">
+      <button id="btn-limpar" class="btn btn-secondary btn-full">
+        <span>🧹</span> Limpar Sessão
+      </button>
+    </div>
+    <!-- Feedback Logs (Banners de Sucesso/Erro) -->
+    <div id="feedback-log" class="feedback-banner hidden">
+      <span class="feedback-icon"></span>
+      <span class="feedback-message"></span>
+    </div>
+
+    <!-- Rodapé (Footer) -->
+    <footer class="app-footer">
+      <span class="version">Versão 1.0.0</span>
+      <span class="divider">•</span>
+      <a href="#" id="link-options">Configurações</a>
+    </footer>
+  </div>
+
+  <!-- Carrega a lógica da popup de forma assíncrona -->
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+module serah-backend
+
+go 1.22
