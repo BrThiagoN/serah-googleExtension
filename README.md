@@ -1,312 +1,267 @@
-# Serah? 🤖 (PROJETO EXCLUSIVAMENTE DEMONSTRATIVO)
+# Serah? 🤖 — Combate à Desinformação em Tempo Real
 
 <p align="center">
   <img src="images/icon128.png" alt="Serah? Logo" width="128">
 </p>
 
 <p align="center">
-  <strong>AVISO IMPORTANTE: Este repositório tem fins exclusivamente demonstrativos. O código não se destina a uso em produção. Todas as informações sensíveis (chaves de API, segredos, credenciais) foram removidas ou ofuscadas.</strong>
-</p>
-
-<p align="center">
-  <strong>Extensão do Chrome para combater desinformação em tempo real, diretamente na página que você está navegando.</strong>
+  <strong>Extensão do Chrome premium e integrada ao navegador para análise instantânea de fatos e combate à desinformação apoiada por Inteligência Artificial (Google Gemini 3.5 Flash).</strong>
 </p>
 
 <p align="center">
   <a href="#-o-problema">O Problema</a> •
   <a href="#-a-solução">A Solução</a> •
-  <a href="#-por-que-uma-extensão-e-não-um-site">Por que uma extensão?</a> •
-  <a href="#-funcionalidades">Funcionalidades</a> •
-  <a href="#-instruções-de-uso">Como usar</a>
+  <a href="#-arquitetura-do-sistema">Arquitetura</a> •
+  <a href="#-stack-tecnológica">Tecnologias</a> •
+  <a href="#-detalhes-de-implementação">Implementação</a> •
+  <a href="#-guia-de-configuração">Instalação & Uso</a> •
+  <a href="#%EF%B8%8F-matriz-de-tratamento-de-erros">Erros</a>
 </p>
+
+---
+
+> [!IMPORTANT]
+> **AVISO DE SEGURANÇA E ADAPTAÇÃO:** Este repositório é uma versão pública adaptada para fins exclusivamente de portfólio e demonstração técnica. Toda informação sensível (como chaves de API, credenciais e tokens) foi removida ou parametrizada através de variáveis de ambiente.
 
 ---
 
 ## ⚠️ O Problema
 
-Vivemos em uma era onde:
-- 🔍 A desinformação se espalha mais rápido do que nunca
-- ⏳ Validar uma informação exige abrir várias abas e perder tempo
-- 🐦 O compartilhamento impulsivo de notícias falsas é comum
-- 📚 Pesquisar fontes confiáveis requer esforço cognitivo considerável
+Na era digital, a disseminação de fake news e boatos ocorre de forma exponencial. Verificar a veracidade de uma afirmação ou notícia exige que o usuário:
+- 🔀 Saia da página atual abrindo novas abas.
+- 🔍 Procure manualmente por agências de checagem.
+- ⌨️ Copie e cole textos repetidamente.
+- 🧠 Gaste energia cognitiva comparando fontes desordenadas.
 
-Esse atrito faz com que muitas pessoas desistam de verificar o que leem, contribuindo para a proliferação de fake news e conteúdos enganosos.
+Esse alto nível de atrito faz com que as pessoas evitem realizar a checagem, compartilhando informações enganosas de forma impulsiva.
 
 ---
 
 ## ✨ A Solução
 
-O **Serah?** é uma extensão para Chrome que integra diretamente ao navegador, permitindo que você:
-- ✅ Verifique a veracidade de um texto com um clique
-- ✅ Analise o conteúdo sem sair da página
-- ✅ Receba explicações detalhadas e fontes confiáveis
-- ✅ Acesse um painel lateral sempre que precisar
+O **Serah?** é uma extensão projetada para Google Chrome (Manifest V3) que se integra como um painel lateral (`sidePanel`). Ele reduz o atrito de verificação a **zero**:
+
+1. **Captura em Um Clique**: Ao selecionar qualquer texto em qualquer página e abrir a extensão, o texto é capturado e enviado automaticamente.
+2. **Área de Transferência Inteligente**: Copia o texto selecionado para o Clipboard e preenche o campo de texto automaticamente para futuras interações rápidas.
+3. **Análise com Structured Outputs**: Envia a consulta para um backend em Go, que aciona a API do Google Gemini usando esquemas rígidos (JSON Schema) para garantir que a resposta retorne com um formato estruturado (veredito, score, explicação e fontes).
+4. **Interface Glassmorphic Premium**: Design responsivo elegante com suporte nativo a temas Claro e Escuro baseados nas configurações do sistema do usuário.
 
 ---
 
-## 🚀 Por que uma extensão e não um site?
+## 📐 Arquitetura do Sistema
 
-Esta é a principal vantagem do Serah? e o que torna tudo diferente!
-
-| **Site tradicional** | **Extensão Serah?** |
-|------------------------|---------------------|
-| 🔀 Exige abrir outro site e trocar de aba | ✅ Não abandona a página que você está lendo |
-| ⏳ Demora para carregar, digitar, colar | ⚡ Funciona instantaneamente com o texto selecionado |
-| 💭 Perde o contexto do conteúdo original | 🎯 Mantém o contexto completo da sua navegação |
-| 📝 Requer copiar/colar manualmente | 📥 Captura o texto automaticamente |
-| 😓 Atrito elevado desincentiva o hábito | 🤩 Simples, rápido, incentiva verificações frequentes |
-| 🔼 Maior chance de compartilhar algo falso | 🔽 Reduz drasticamente o compartilhamento de desinformação |
-
-Serah? não é só mais um chatbot — é uma **camada de inteligência diretamente no seu navegador**, projetada para fazer da verificação de fatos um hábito natural, sem atritos.
-
----
-
-## 🛠️ Funcionalidades
-
-* **Captura de Texto Seleciona:** Grife qualquer texto na página e clique para capturar automaticamente
-* **Sidepanel Moderno:** Interface premium com glassmorphism, suporte a tema claro/escuro
-* **Histórico Local:** Armazena suas últimas verificações no chrome.storage
-* **IA Potente:** Utiliza Google Gemini 1.5 Flash para análise de veracidade
-* **Relatório Detalhado:** Veredito (verdade, falso, duvidoso), score de confiabilidade e fontes recomendadas
-* **Zero Dependências Backend:** Servidor Go usando apenas a biblioteca padrão
-
----
-
-## 📐 Arquitetura
+A extensão divide-se em um Frontend (Client-side) embarcado no navegador e um Backend em Go local que faz o intermédio seguro com as APIs da Google.
 
 ```mermaid
-flowchart TD
-    A[Usuário] -->|Seleciona Texto| B[Chrome Content Script]
-    B -->|Captura Conteúdo| C[Popup Frontend]
-    C -->|Requisição POST| D[Backend Go - API /api/verify]
-    D -->|Prompt Estruturado| E[Google Gemini API]
-    E -->|Resposta JSON| D
-    D -->|Resultado Estruturado| C
-    C -->|Exibe Veredito| A
-```
+flowchart TB
+    subgraph Navegador [Google Chrome Client]
+        A[Usuário] -->|Seleciona Texto na Página| B[Content Script: content.js]
+        A -->|Clica no Ícone da Extensão| C[Service Worker: background.js]
+        C -->|Abre automaticamente| D[Side Panel: popup.html / popup.js]
+        D -->|Pede seleção do DOM| B
+        B -->|Retorna Texto Selecionado| D
+        D -->|Copia para clipboard & preenche input| D
+    end
 
-### Componentes Principais
+    subgraph BackendLocal [Servidor Go Local: localhost:3000]
+        E[Go API: /api/verify]
+        F[Carregador .env Customizado]
+        G[CORS Middleware]
+    end
 
-| Camada | Arquivo | Responsabilidade |
-|--------|---------|-----------------|
-| **Frontend Popup** | `popup.html` / `popup.css` / `popup.js` | Interface do usuário no painel lateral |
-| **Content Script** | `content.js` | Injetado em todas as páginas para capturar texto selecionado |
-| **Background Service Worker** | `background.js` | Gerencia eventos da extensão em segundo plano |
-| **Backend API** | `backend/main.go` | Servidor Go que intermedia a comunicação com a IA |
+    subgraph GoogleCloud [Nuvem do Google API Studio]
+        H[Google Gemini 3.5 Flash API]
+    end
 
----
+    D -->|Requisição POST JSON| E
+    E -->|Validação e Preparação do Prompt| H
+    H -->|Resposta JSON Estruturada| E
+    E -->|JSON Unificado + ID| D
+    D -->|Renderização Dinâmica de Veredito & Fontes| A
 
-## 🔄 Fluxo de Funcionamento
-
-1. 🔤 Usuário seleciona um texto na página da web que deseja verificar
-2. 🔍 Usuário abre o painel lateral do Serah? (clicando no ícone da extensão)
-3. ⬇️ O `popup.js` captura o texto selecionado via `content.js` (ou o usuário pode digitar manualmente)
-4. 📤 Quando o usuário clica em "Enviar", o popup faz uma requisição `POST http://localhost:3000/api/verify`
-5. 🧠 O servidor Go (`main.go`) recebe o texto, prepara um prompt estruturado e chama a API do Google Gemini
-6. 📊 Gemini retorna o veredito, score de confiabilidade, explicação e fontes
-7. 📃 O popup exibe o relatório completo para o usuário no painel lateral
-
----
-
-## 📁 Estrutura do Projeto
-
-```
-byteboys_serah/
-├── backend/
-│   ├── .env             # Arquivo de variáveis de ambiente local (não versionado)
-│   ├── .env.example     # Exemplo de variáveis de ambiente para o backend
-│   ├── coverage.out     # Relatório de cobertura de testes
-│   ├── go.mod           # Módulo Go
-│   ├── main.go          # Código do servidor Go
-│   └── main_test.go     # Testes do backend
-├── images/
-│   ├── icon128.png      # Ícone da extensão (128x128)
-│   ├── icon16.png       # Ícone da extensão (16x16)
-│   ├── icon32.png       # Ícone da extensão (32x32)
-│   └── icon48.png       # Ícone da extensão (48x48)
-├── styles/
-│   └── color-palette.css # Sistema de cores oficial
-├── background.js        # Service Worker da extensão
-├── content.js           # Script injetado nas páginas
-├── manifest.json        # Manifesto da extensão Chrome (v3)
-├── popup.css            # Estilos do frontend
-├── popup.html           # Layout do painel lateral
-└── popup.js             # Lógica da interface
+    style Navegador fill:#f5fdf9,stroke:#10b981,stroke-width:2px;
+    style BackendLocal fill:#edf5ff,stroke:#3b82f6,stroke-width:2px;
+    style GoogleCloud fill:#faf5ff,stroke:#a855f7,stroke-width:2px;
 ```
 
 ---
 
-## 🎨 Sistema de Design
+## 🛠️ Stack Tecnológica
 
-### Paleta Oficial
+### Frontend (Extensão do Chrome)
+- **HTML5 & CSS3**: Interface responsiva construída com CSS puro, utilizando variáveis de cores HSL adaptáveis e estética translúcida (*Glassmorphism*).
+- **Vanilla JavaScript (ES6+)**: Sem frameworks ou dependências externas.
+- **Chrome Extension APIs**:
+  - `chrome.sidePanel`: Usado para fixar a interface no painel lateral do navegador de forma não-intrusiva.
+  - `chrome.storage.local`: Utilizado para persistência de sessão e histórico local de verificações de forma segura.
+  - `chrome.tabs` / `chrome.runtime`: Comunicação assíncrona baseada em eventos para extrair texto do DOM.
 
-#### Verdes (Primárias / Ação)
-| Cor | Hex | Uso |
-|-----|-----|-----|
-| Verde Escuro | `#0E8A4B` | Botões primários, links de confirmação |
-| Verde Médio | `#19B86A` | Hover de botões, destaque |
-| Verde Alternativo | `#14B866` | Estados de sucesso |
-| Verde Claro | `#23D17B` | Indicadores de status ativo |
-
-#### Vermelhos (Alerta / Erro)
-| Cor | Hex | Uso |
-|-----|-----|-----|
-| Vermelho Escuro | `#D62828` | Erros críticos |
-| Vermelho Escuro Alternativo | `#B71C1C` | Mensagens de erro |
-| Vermelho Claro | `#FF5252` | Alertas de aviso |
-| Vermelho Muito Claro | `#FF6B6B` | Elementos decorativos de erro |
-
-#### Neutros (Estrutura)
-| Cor | Hex | Uso |
-|-----|-----|-----|
-| Preto Profundo | `#121212` | Fundo do tema escuro |
-| Preto Médio | `#1B1B1B` | Fundo de cards no tema escuro |
-| Preto Claro | `#252525` | Bordas no tema escuro |
-| Branco Neve | `#F8FAF9` | Fundo do tema claro |
-| Branco Puro | `#FFFFFF` | Fundo de cards no tema claro |
-
-#### Textos
-| Cor | Hex | Uso |
-|-----|-----|-----|
-| `#1A1A1A` | Texto principal (tema claro) |
-| `#5E646A` | Texto secundário (tema claro) |
-| `#B0B8BE` | Texto secundário (tema escuro) |
-| `#F5F5F5` | Texto principal (tema escuro) |
+### Backend (Serviço de Intermediação)
+- **Go (Golang 1.22+)**: Escrito utilizando estritamente a biblioteca padrão (`net/http`, `encoding/json`, `crypto/rand`).
+- **Zero Dependências Externas**: O servidor Go não utiliza frameworks pesados como Gin ou Fiber, mantendo o binário extremamente leve, seguro e rápido de compilar.
+- **Unit Testing**: Suite de testes completa com mocks para simulação de comportamento da API Gemini e tratamento de erros do leitor HTTP (`httptest`, `json`).
 
 ---
 
-## ⚙️ Instalação
+## 💡 Detalhes de Implementação
 
-### Requisitos
+### 1. Chamada Estruturada (Structured Outputs) com Gemini API
+Para evitar a variação caótica de saídas em linguagem natural dos LLMs tradicionais, o backend em Go força a API do Gemini a responder seguindo um esquema rígido de JSON Schema. Veja o trecho de configuração do schema no backend:
 
-* **Chrome/Edge/Brave (ou outro navegador baseado em Chromium)**: Versão 88 ou superior
-* **Go (para o backend)**: 1.22 ou superior (se quiser rodar o servidor localmente)
-* **Chave API do Google Gemini**: Obtida gratuitamente no [Google AI Studio](https://aistudio.google.com/)
+```go
+"generationConfig": map[string]interface{}{
+    "responseMimeType": "application/json",
+    "responseSchema": map[string]interface{}{
+        "type": "OBJECT",
+        "properties": map[string]interface{}{
+            "reliability_score": map[string]interface{}{
+                "type":        "NUMBER",
+                "description": "Nível de confiança decimal de 0.00 a 1.00 sobre a veracidade do texto.",
+            },
+            "verdict": map[string]interface{}{
+                "type":        "STRING",
+                "enum":        []string{"verdade", "falso", "duvidoso"},
+            },
+            "explanation": map[string]interface{}{
+                "type":        "STRING",
+                "description": "Explicação detalhada e didática em português brasileiro.",
+            },
+            "sources": map[string]interface{}{
+                "type":        "ARRAY",
+                "items": map[string]interface{}{
+                    "type": "OBJECT",
+                    "properties": map[string]interface{}{
+                        "title":      map[string]interface{}{"type": "STRING"},
+                        "url":        map[string]interface{}{"type": "STRING"},
+                        "similarity": map[string]interface{}{"type": "NUMBER"},
+                    },
+                    "required": []string{"title", "url", "similarity"},
+                },
+            },
+        },
+        "required": []string{"reliability_score", "verdict", "explanation", "sources"},
+    },
+}
+```
 
----
-
-## 🚀 Executando o Backend (Apenas para demonstração local)
-
-1.  Clone o repositório:
-    ```bash
-    git clone https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git
-    cd NOME_DO_REPOSITORIO
-    ```
-
-2.  Entre na pasta do backend:
-    ```bash
-    cd backend
-    ```
-
-3.  Configure sua chave da API (não inclusa):
-
-    **Linux/macOS:**
-    ```bash
-    export GEMINI_API_KEY="SUA_CHAVE_AQUI"
-    go run main.go
-    ```
-
-    **Windows (PowerShell):**
-    ```powershell
-    $env:GEMINI_API_KEY="SUA_CHAVE_AQUI"
-    go run main.go
-    ```
-
-    **Windows (Command Prompt):**
-    ```cmd
-    set GEMINI_API_KEY=SUA_CHAVE_AQUI
-    go run main.go
-    ```
-
-4.  Você verá uma mensagem confirmando que o servidor está rodando na porta 3000!
-
----
-
-## 📦 Carregando a Extensão no Chrome
-
-1.  Abra o Chrome e navegue para `chrome://extensions/`
-2.  Ative o **Modo do Desenvolvedor** (canto superior direito)
-3.  Clique em **Carregar sem compactação**
-4.  Selecione a **pasta raiz** do projeto (`byteboys_serah/`, não a `backend/`!)
-5.  A extensão aparecerá na lista e no seu menu de extensões!
+### 2. Ciclo de Vida da Captura
+1. Ao carregar o Side Panel (`popup.js`), ele executa uma consulta rápida e silenciosa à aba ativa.
+2. O script de conteúdo (`content.js`) responde com a seleção de texto atual obtida por `window.getSelection()`.
+3. Caso haja texto selecionado, o script copia o conteúdo para a área de transferência do usuário usando `navigator.clipboard.writeText`, preenche o formulário e executa automaticamente a requisição para o backend para economizar cliques.
 
 ---
 
-## 🔌 API do Backend
+## ⚙️ Guia de Configuração
 
-### `GET /` - Health Check
-Verifica se o servidor está no ar.
-*   **Resposta 200 OK:**
-    ```json
-    {"status":"online","message":"Serah? Backend is running! Go version active."}
-    ```
+### Requisitos Mínimos
+- Google Chrome (ou outro navegador baseado em Chromium) v88+.
+- Go (Golang) v1.22 ou superior instalado.
+- Chave de API do Gemini obtida em [Google AI Studio](https://aistudio.google.com/).
 
-### `POST /api/verify` - Verificação de Veracidade
-*   **Cabeçalhos:** `Content-Type: application/json`
-*   **Corpo da Requisição:**
-    ```json
-    {"text": "Texto que você quer verificar"}
-    ```
-*   **Resposta 200 OK:**
-    ```json
-    {
-      "id": "uuid-da-analise",
-      "text": "Texto que você quer verificar",
-      "status": "success",
-      "analysis": {
-        "reliability_score": 0.85,
-        "verdict": "verdade",
-        "explanation": "Explicação detalhada...",
-        "sources": [
-          {
-            "title": "Agência Lupa",
-            "url": "https://lupa.uol.com.br/",
-            "similarity": 0.95
-          }
-        ]
-      },
-      "timestamp": "2026-06-21T12:56:41Z"
-    }
-    ```
+### Passo 1: Configuração do Backend
+1. Clone o repositório em sua máquina local:
+   ```bash
+   git clone https://github.com/BrThiagoN/serah-googleExtension.git
+   cd serah-googleExtension
+   ```
+2. Crie um arquivo `.env` dentro da pasta `backend/` seguindo o modelo `.env.example`:
+   ```bash
+   PORT=3000
+   GEMINI_API_KEY="SUA_CHAVE_DE_API_DO_GEMINI_AQUI"
+   ```
+3. Navegue até o diretório do backend e execute o servidor:
+   ```bash
+   cd backend
+   go run main.go
+   ```
+   > [!TIP]
+   > O backend possui um sistema de logs coloridos e elegantes no terminal. Quando iniciar com sucesso, você visualizará a mensagem: `[SUCCESS] GEMINI_API_KEY is set. Backend will use Google Gemini API.` na porta 3000.
+
+### Passo 2: Instalação da Extensão no Navegador
+1. Abra o navegador e navegue até a URL `chrome://extensions/`.
+2. No canto superior direito, ative a chave **Modo do desenvolvedor**.
+3. Clique no botão **Carregar sem compactação** (Load unpacked) no canto superior esquerdo.
+4. Selecione a **pasta raiz** do projeto (`serah-googleExtension/`), onde se encontra o arquivo `manifest.json`.
+5. Pronto! O ícone do **Serah?** aparecerá na sua barra de extensões. Clique nele para abrir o painel lateral.
 
 ---
 
-## 💡 Casos de Uso
+## 🔌 API do Backend (Referência de Rotas)
 
-1. **📰 Verificando Notícias:** Leu uma notícia suspeita? Selecione o texto e peça para o Serah? analisar
-2. **📱 Postagens em Redes Sociais:** Qualquer compartilhamento parece exagerado? Verifique em segundos!
-3. **💬 Mensagens em Grupos:** Recebeu uma afirmação radical no WhatsApp ou Telegram? Confira sua veracidade
-4. **📊 Estatísticas e Dados:** Dados sobre saúde, política ou economia parecem incorretos? Valide-os
-5. **🗣️ Afirmações Políticas:** Não se deixe enganar por discursos sem base — use a IA para verificar
+### `GET /` — Validação de Status (Health Check)
+Verifica se o backend local está operacional.
+- **Resposta (200 OK):**
+  ```json
+  {
+    "status": "online",
+    "message": "Serah? Backend is running! Go version active."
+  }
+  ```
+
+### `POST /api/verify` — Checagem de Veracidade
+Analisa o texto submetido com a inteligência do Gemini.
+- **Headers:** `Content-Type: application/json`
+- **Corpo do Request:**
+  ```json
+  {
+    "text": "Texto ou notícia a ser avaliada pela IA"
+  }
+  ```
+- **Resposta (200 OK):**
+  ```json
+  {
+    "id": "7a3bdf01-09de-4b02-a1f9-906cbdf8e851",
+    "text": "Texto ou notícia a ser avaliada pela IA",
+    "status": "success",
+    "analysis": {
+      "reliability_score": 0.95,
+      "verdict": "verdade",
+      "explanation": "Explicação fundamentada em dados...",
+      "sources": [
+        {
+          "title": "Tribunal Superior Eleitoral",
+          "url": "https://www.tse.jus.br",
+          "similarity": 0.98
+        }
+      ]
+    },
+    "timestamp": "2026-07-01T22:50:00Z"
+  }
+  ```
 
 ---
 
-## 🚀 Melhorias Futuras
+## ⚠️ Matriz de Tratamento de Erros
 
-* 📚 Histórico sincronizado na nuvem
-* 📊 Dashboard com estatísticas das verificações do usuário
-* 🔗 Integração com mais APIs de fact-checking (como Lupa, Aos Fatos, Fato ou Fake)
-* 📱 Versão para Firefox
-* 🌐 Suporte a múltiplos idiomas
-* ⚙️ Página de configurações da extensão
+A extensão implementa um sistema robusto de banners de erros com códigos amigáveis para diagnóstico de falhas técnicas e de permissões.
+
+| Código de Erro | Tipo de Falha | Descrição | Tratamento/Solução |
+|:---:|---|---|---|
+| **`VAL_400`** | Entrada inválida | O texto enviado para verificação estava em branco ou continha apenas espaços. | O frontend avisa ao usuário para digitar ou selecionar um texto válido. |
+| **`VAL_405`** | Erro de protocolo HTTP | Foi feita uma requisição que não utilizou o método HTTP `POST`. | A API retorna status `405 Method Not Allowed`. |
+| **`CAP_204`** | Sem seleção | O usuário clicou para capturar texto da página, mas não havia nada selecionado. | Alerta na interface orientando o usuário a grifar o texto. |
+| **`CAP_403`** | Permissão negada | Tentativa de captura em páginas restritas do navegador (como `chrome://settings/`). | O frontend trata graciosamente informando que a captura não é permitida ali. |
+| **`CAP_404`** | Sem aba ativa | O navegador não conseguiu identificar nenhuma aba ativa ou janela em foco. | Exibe uma mensagem solicitando que o usuário selecione uma aba válida. |
+| **`CAP_501`** | Script não injetado | A página foi carregada antes da extensão ser ativada ou não possui scripts injetados. | Recomenda ao usuário recarregar a aba atual (`F5`) para re-injetar o `content.js`. |
+| **`STG_501` / `502`** | Armazenamento local | Falha de gravação ou leitura no `chrome.storage.local`. | O sistema usa fallback automático para `localStorage` do navegador. |
+| **`AI_503`** | Sem conexão local | O frontend não conseguiu estabelecer comunicação com `http://localhost:3000`. | Notifica o usuário de que o servidor Go local na porta 3000 não está rodando. |
+| **`API_KEY_MISSING`** | Chave ausente | O servidor Go local está online, mas a variável `GEMINI_API_KEY` está vazia. | Retorna erro 500 informando que a chave de API precisa ser configurada no `.env`. |
+| **`API_CALL_FAILED`** | Falha de serviço externo | O Google Gemini retornou um erro HTTP ou tempo limite expirou (timeout). | A API do backend reporta o erro HTTP e o frontend exibe o aviso no banner. |
+| **`SYS_500`** | Erro inesperado | Falhas gerais de parsing de JSON ou problemas desconhecidos de sistema. | Exibe um alerta genérico solicitando nova tentativa. |
 
 ---
 
-## 🤝 Equipe ByteBoys
+## 🤝 Integrantes (Equipe ByteBoys)
 
-<div align="center">
+Desenvolvido originalmente durante a atividade de Hackathon do grupo:
 
-| Integrante | LinkedIn |
-|------------|----------|
-| 👨‍💻 **Luiz Alberto** | [![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/luiz-holanda-030bb0282/) |
-| 👨‍💻 **Victor Ribeiro** | [![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/dev-victor-ribeiro-baradel/) |
-| 👨‍💻 **Rafael Tarug** | [![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/tarug/) |
-| 👨‍💻 **Thiago Nascimento** | [![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/thiagonascimento08/) |
-
-</div>
+- **Luiz Alberto** — [LinkedIn](https://www.linkedin.com/in/luiz-holanda-030bb0282/)
+- **Victor Ribeiro** — [LinkedIn](https://www.linkedin.com/in/dev-victor-ribeiro-baradel/)
+- **Rafael Tarug** — [LinkedIn](https://www.linkedin.com/in/tarug/)
+- **Thiago Gomes Nascimento** — [LinkedIn](https://www.linkedin.com/in/thiagonascimento08/)
 
 ---
 
 ## 📜 Licença
 
-Este repositório é aberto para aprendizado e desenvolvimento!
+Este repositório é de uso aberto para fins educativos, acadêmicos e desenvolvimento de portfólio. Sinta-se livre para explorar o código da extensão e do backend em Go!
